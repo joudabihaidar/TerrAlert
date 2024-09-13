@@ -1,0 +1,5 @@
+2024-09-13 23:56:07,009 - INFO - Connected to database successfully
+2024-09-13 23:56:07,009 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-13 23:56:07,010 - INFO - Created staging table staging_disasters successfully
+2024-09-13 23:56:07,099 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-13 23:56:07,105 - INFO - Database connection closed successfully
