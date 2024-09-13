@@ -8,6 +8,7 @@ from dateutil import parser
 import psycopg2
 from psycopg2 import sql
 import logging
+from datetime import datetime
 
 # Get the directory where the script is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -155,7 +156,7 @@ def try_parsing_date(text: str) -> pd.Timestamp:
 
 # Transform function that applies cleaning, transformations, and geocoding
 ##########################################################################
-def transform_data(disasters: pd.DataFrame, floods: pd.DataFrame, storms: pd.DataFrame) -> tuple:
+def transform_data(disasters: pd.DataFrame):#, floods: pd.DataFrame, storms: pd.DataFrame) -> tuple:
     """
     Transforms disasters, floods, and storms data by applying various transformations.
     Returns the transformed DataFrames.
@@ -166,33 +167,37 @@ def transform_data(disasters: pd.DataFrame, floods: pd.DataFrame, storms: pd.Dat
         disasters = duration_days(disasters, 'start_date', 'end_date', 'disasters')
         logging.info("Disasters data transformation completed")
 
-        # Process floods DataFrame
-        floods = add_reverse_geocode_info(floods, dataset_name='floods')
-        floods['dfo_began'] = floods['dfo_began'].apply(try_parsing_date)
-        floods['dfo_ended'] = floods['dfo_ended'].apply(try_parsing_date)
-        floods = duration_days(floods, 'dfo_began', 'dfo_ended', 'floods')
-        logging.info("Floods data transformation completed")
+        # # Process floods DataFrame
+        # floods = add_reverse_geocode_info(floods, dataset_name='floods')
+        # floods['dfo_began'] = floods['dfo_began'].apply(try_parsing_date)
+        # floods['dfo_ended'] = floods['dfo_ended'].apply(try_parsing_date)
+        # floods = duration_days(floods, 'dfo_began', 'dfo_ended', 'floods')
+        # logging.info("Floods data transformation completed")
 
-        # Process storms DataFrame
-        storms = clean_column_names(storms)
-        storms = add_reverse_geocode_info(storms, 'lat', 'long', 'storms')
-        storms = compute_dates(storms, ['year', 'month', 'day'], ['year', 'month', 'day'], 'storms')
-        logging.info("Storms data transformation completed")
+        # # Process storms DataFrame
+        # storms = clean_column_names(storms)
+        # storms = add_reverse_geocode_info(storms, 'lat', 'long', 'storms')
+        # storms = compute_dates(storms, ['year', 'month', 'day'], ['year', 'month', 'day'], 'storms')
+        # logging.info("Storms data transformation completed")
 
-        return disasters, floods, storms
+        return disasters#, floods, storms
     except Exception as error:
         logging.error(f"Error during data transformation: {error}")
-        return disasters, floods, storms
+        return disasters#, floods, storms
 
 if __name__ == "__main__":
     # Fetch data
-    disasters = get_data_from_db("SELECT * FROM staging_disasters;")
-    floods = get_data_from_db("SELECT * FROM staging_floods;")
-    storms = get_data_from_db("SELECT * FROM staging_storms;")
+    current_date = datetime.now().strftime("%Y%m%d")
+    disasters = get_data_from_db( f""" --sql
+    SELECT * FROM staging_disasters 
+    WHERE TO_CHAR(extraction_time, 'YYYYMMDD') = '{current_date}';
+    """)
+    # floods = get_data_from_db("SELECT * FROM staging_floods;")
+    # storms = get_data_from_db("SELECT * FROM staging_storms;")
 
     # Apply transformations
-    if disasters is not None and floods is not None and storms is not None:
-        transformed_disasters, transformed_floods, transformed_storms = transform_data(disasters, floods, storms)
+    if disasters is not None: # and floods is not None and storms is not None:
+        transformed_disasters= transform_data(disasters)#, floods, storms)
     else:
         logging.error("Data fetch failed. Transformations not applied.")
 
