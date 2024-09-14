@@ -27,3 +27,40 @@
 2024-09-14 20:40:04,894 - INFO - Connected to database successfully
 2024-09-14 20:40:05,137 - INFO - Data fetched successfully for query: --sql
                      SELECT * FROM staging_disasters;
+2024-09-14 21:09:38,278 - INFO - Starting extraction process...
+2024-09-14 21:09:38,311 - INFO - Connected to database successfully
+2024-09-14 21:09:38,316 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-14 21:09:38,316 - INFO - Created staging table staging_disasters successfully
+2024-09-14 21:09:38,412 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-14 21:09:38,420 - INFO - Extraction completed successfully.
+2024-09-14 21:09:38,420 - INFO - Starting transformation process...
+2024-09-14 21:09:38,420 - ERROR - Error fetching data: Using URI string without sqlalchemy installed.
+2024-09-14 21:09:38,420 - ERROR - Error occurred: 'str' object has no attribute 'close'
+2024-09-14 21:10:24,141 - INFO - Starting extraction process...
+2024-09-14 21:10:24,180 - INFO - Connected to database successfully
+2024-09-14 21:10:24,180 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-14 21:10:24,180 - INFO - Created staging table staging_disasters successfully
+2024-09-14 21:10:24,277 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-14 21:10:24,287 - INFO - Extraction completed successfully.
+2024-09-14 21:10:24,287 - INFO - Starting transformation process...
+2024-09-14 21:10:24,287 - ERROR - Error fetching data: Using URI string without sqlalchemy installed.
+2024-09-14 21:10:24,287 - ERROR - Error occurred: 'str' object has no attribute 'close'
+2024-09-14 21:10:48,669 - INFO - Starting extraction process...
+2024-09-14 21:10:48,711 - INFO - Connected to database successfully
+2024-09-14 21:10:48,711 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-14 21:10:48,712 - INFO - Created staging table staging_disasters successfully
+2024-09-14 21:10:48,802 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-14 21:10:48,811 - INFO - Extraction completed successfully.
+2024-09-14 21:10:48,811 - INFO - Starting transformation process...
+2024-09-14 21:10:48,811 - ERROR - Error fetching data: Using URI string without sqlalchemy installed.
+2024-09-14 21:10:48,811 - ERROR - Error occurred: 'str' object has no attribute 'close'
+2024-09-14 21:12:28,664 - INFO - Connected to database successfully
+2024-09-14 21:12:28,664 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-14 21:12:28,668 - INFO - Created staging table staging_disasters successfully
+2024-09-14 21:12:28,760 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-14 21:12:28,769 - ERROR - Error fetching data: Using URI string without sqlalchemy installed.
+2024-09-14 21:13:05,278 - INFO - Connected to database successfully
+2024-09-14 21:13:05,278 - INFO - Extracted columns from CSV file C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv successfully
+2024-09-14 21:13:05,284 - INFO - Created staging table staging_disasters successfully
+2024-09-14 21:13:05,377 - INFO - Data loaded into staging table staging_disasters successfully
+2024-09-14 21:13:05,377 - ERROR - Error fetching data: Using URI string without sqlalchemy installed.
