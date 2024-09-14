@@ -1,0 +1,26 @@
+2024-09-14 10:33:14,103 - INFO - Connected to database successfully
+2024-09-14 10:33:14,103 - INFO - Creating table: dim_disaster_groups
+2024-09-14 10:33:14,103 - INFO - Table dim_disaster_groups created successfully.
+2024-09-14 10:33:14,103 - INFO - Creating table: dim_disaster_types
+2024-09-14 10:33:14,119 - INFO - Table dim_disaster_types created successfully.
+2024-09-14 10:33:14,119 - INFO - Creating table: dim_disaster_names
+2024-09-14 10:33:14,119 - INFO - Table dim_disaster_names created successfully.
+2024-09-14 10:33:14,119 - INFO - Creating table: dim_locations
+2024-09-14 10:33:14,119 - INFO - Table dim_locations created successfully.
+2024-09-14 10:33:14,119 - INFO - Creating table: dim_dates
+2024-09-14 10:33:14,119 - INFO - Table dim_dates created successfully.
+2024-09-14 10:33:14,119 - INFO - Creating table: dim_associated_distructions
+2024-09-14 10:33:14,119 - INFO - Table dim_associated_distructions created successfully.
+2024-09-14 10:33:14,119 - INFO - Creating table: dim_ofda_responses
+2024-09-14 10:33:14,134 - INFO - Table dim_ofda_responses created successfully.
+2024-09-14 10:33:14,134 - INFO - Creating table: dim_appeals
+2024-09-14 10:33:14,134 - INFO - Table dim_appeals created successfully.
+2024-09-14 10:33:14,134 - INFO - Creating table: dim_declarations
+2024-09-14 10:33:14,134 - INFO - Table dim_declarations created successfully.
+2024-09-14 10:33:14,134 - INFO - Creating table: dim_mag_scales
+2024-09-14 10:33:14,134 - INFO - Table dim_mag_scales created successfully.
+2024-09-14 10:33:14,134 - INFO - Creating table: dim_adm_levels
+2024-09-14 10:33:14,134 - INFO - Table dim_adm_levels created successfully.
+2024-09-14 10:33:14,134 - INFO - Creating table: fact_disasters
+2024-09-14 10:33:14,150 - INFO - Table fact_disasters created successfully.
+2024-09-14 10:33:14,155 - INFO - All tables created successfully.
