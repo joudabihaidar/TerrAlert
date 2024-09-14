@@ -1,6 +1,17 @@
 import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
+
+# Color scale: shades of green and orange
+custom_colors = [
+    '#3A5A40',  # Dark Green
+    '#588157',  # Medium Green
+    '#A3B18A',  # Olive Green
+    '#CFE1B9',  # Pale Mint Green
+    '#F9A826',  # Vibrant Orange
+    '#F7B500',  # Light Orange
+    '#F4A300',  # Soft Orange
+    '#F57F17'   # Deep Orange
+]
 
 # Data source: https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/{???}.csv
 
@@ -23,7 +34,6 @@ def extract_hour(time):
 
 # Fetch data and clean it
 def fetch_eq_data(period='daily', region='Worldwide', min_mag=1):
-    # Where we are getting data from
     url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/{}.csv'
 
     if period == 'weekly':
@@ -33,36 +43,29 @@ def fetch_eq_data(period='daily', region='Worldwide', min_mag=1):
     else:
         new_url = url.format('all_day')
 
-    # Fetch data and extract relevant cols
     df_earthquake = pd.read_csv(new_url)
     df_earthquake = df_earthquake[['time', 'latitude', 'longitude', 'mag', 'place']]
 
-    # Extract sub-area in place cols
     place_list = df_earthquake['place'].str.split(', ')    
     df_earthquake['sub_area'] = place_list.apply(extract_subarea)
     df_earthquake['area'] = place_list.apply(extract_area)
     df_earthquake = df_earthquake.drop(columns=['place'], axis=1)
 
-    # Filter data based on min. threshold
     if isinstance(min_mag, int) and min_mag > 0:
         df_earthquake = df_earthquake[df_earthquake['mag'] >= min_mag]
     else:
         df_earthquake = df_earthquake[df_earthquake['mag'] > 0]
 
-    # Convert 'time' to pd datetime
     df_earthquake['time'] = pd.to_datetime(df_earthquake['time'])
     
-    # Set lat and long to some default if not found
     if region in df_earthquake['area'].to_list():
         df_earthquake = df_earthquake[df_earthquake['area'] == region]
         max_mag = df_earthquake['mag'].max()
         center_lat = df_earthquake[df_earthquake['mag'] == max_mag]['latitude'].values[0]
         center_long = df_earthquake[df_earthquake['mag'] == max_mag]['longitude'].values[0]
     else:
-        center_lat, center_long = [54,15]
+        center_lat, center_long = [54, 15]
 
-    # Set cols for animation frames
-    # weekdays, dates, and hours 
     if period == 'weekly':
         animation_frame_col = 'weekday'
         df_earthquake[animation_frame_col] = df_earthquake['time'].apply(extract_weekday)
@@ -77,10 +80,9 @@ def fetch_eq_data(period='daily', region='Worldwide', min_mag=1):
 
     return df_earthquake, center_lat, center_long
 
-
 # Create Visualizer 
 def visualize_eq_data(period='daily', region='Worldwide', min_mag=1):
-    df_earthquake, center_lat, center_long = fetch_eq_data(period=period, region=region,min_mag=min_mag)
+    df_earthquake, center_lat, center_long = fetch_eq_data(period=period, region=region, min_mag=min_mag)
 
     if period == 'monthly':
         animation_frame_col = 'date'
@@ -100,7 +102,8 @@ def visualize_eq_data(period='daily', region='Worldwide', min_mag=1):
         zoom=1,
         mapbox_style='carto-positron',
         animation_frame=animation_frame_col,
-        title='Earthquakes'
+        color_continuous_scale=custom_colors,  # Apply custom color scale
+        title='Recent Earthquakes'
     )
 
     fig.show()
@@ -108,4 +111,3 @@ def visualize_eq_data(period='daily', region='Worldwide', min_mag=1):
     return None
 
 visualize_eq_data(period='monthly', region='Worldwide', min_mag=1)
-

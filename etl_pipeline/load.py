@@ -3,17 +3,14 @@ import logging
 import os
 import pandas as pd
 
-# Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define the path to the logs folder
+# directory where the script is located
+script_dir = os.getcwd()
+# logs folder
 logs_dir = os.path.join(script_dir, 'logs')
-
-# Ensure the logs directory exists
 if not os.path.exists(logs_dir):
     os.makedirs(logs_dir)
-
-# Configure logging to store logs in the logs folder
+# configuring logging to store logs in the logs folder
 logging.basicConfig(
     filename=os.path.join(logs_dir, 'load.log'),
     level=logging.DEBUG,
@@ -23,14 +20,14 @@ logging.basicConfig(
 
 # Connecting to PostgreSQL database
 ###################################
-def connect_db():
+def connect_db(dbname):
     """
     Connects to the PostgreSQL database.
     Returns a connection object if successful, or None if connection fails.
     """
     try:
         conn = psycopg2.connect(
-            dbname=os.getenv('DB_NAME', 'disasters_dwh'),
+            dbname=os.getenv('DB_NAME', dbname),
             user=os.getenv('DB_USER', 'postgres'),
             password=os.getenv('DB_PASSWORD', 'Michel2003'),
             host=os.getenv('DB_HOST', 'localhost'),
@@ -46,7 +43,6 @@ def connect_db():
 def create_disaster_tables(conn):
     try:
         cur = conn.cursor()
-
         # dim_disaster_groups
         try:
             logging.info("Creating table: dim_disaster_groups")
@@ -246,5 +242,118 @@ def create_disaster_tables(conn):
     finally:
         cur.close()
 
+# Function to get data from PostgreSQL and load into a pandas DataFrame
+#######################################################################
+def get_data_from_db(query,conn):
+    """
+    Fetches data from the PostgreSQL database using the provided query.
+    Cleans column names and returns the data as a pandas DataFrame.
+    """
+    #conn = connect_db()
+    if conn is None:
+        logging.error("Connection to database failed")
+        return None
+    
+    try:
+        df = pd.read_sql_query(query, conn)
+        logging.info(f"Data fetched successfully for query: {query}")
+        return df
+    except Exception as error:
+        logging.error(f"Error fetching data: {error}")
+        return None
+    finally:
+        conn.close()
+
+
+# Function to create a hierarchy of groups and subgroups and Subsubgroups... 
+############################################################################
+def create_hierarchy(df, level_cols, id_col_name):
+    """
+    Create a hierarchy of groups and subgroups with incremental IDs, and add the the Ids to the original DataFrame.
+    """
+    hierarchy = pd.DataFrame(columns=['id', 'name', 'parent_id'])
+    current_id = 1
+    
+    parent_ids = {}  # A dictionary to keep track of parent IDs for each group level
+
+    df[id_col_name] = None
+    
+    for i, level in enumerate(level_cols):
+        unique_values = df[level].unique()
+        
+        for value in unique_values:
+            #  parent ID (if it's not the first level)
+            if i > 0:
+                # checking if there is a matching parent in the previous level
+                parent_row = df[df[level] == value]
+                if len(parent_row) > 0:
+                    parent_value = parent_row[level_cols[i-1]].values[0]
+                    parent_id = parent_ids.get(parent_value, None)
+                else:
+                    parent_id = None  # No matching parent found
+            else:
+                parent_id = None  # First level has no parent
+     
+            hierarchy = pd.concat([hierarchy, pd.DataFrame({
+                'id': [current_id],
+                'name': [value],
+                'parent_id': [parent_id]
+            })], ignore_index=True)
+            
+            parent_ids[value] = current_id
+            df.loc[df[level] == value, id_col_name] = current_id
+            
+            current_id += 1
+    df = df.drop(columns=level_cols)
+    return hierarchy, df
+
+
+# Function to generate all dates between the starting date and ending date
+##########################################################################
+def generate_date_ids(df, start_date_col, end_date_col, id_name='date_id'):
+    """
+    Generates incremental IDs for all dates between the minimum and maximum dates 
+    found in the starting_date and ending_date columns, updates the original DataFrame 
+    to replace dates with their corresponding IDs, and creates a new DataFrame with 
+    all unique dates and their IDs.
+    """
+
+    df[start_date_col] = pd.to_datetime(df[start_date_col])
+    df[end_date_col] = pd.to_datetime(df[end_date_col])
+    
+    min_date = min(df[start_date_col].min(), df[end_date_col].min())
+    max_date = max(df[start_date_col].max(), df[end_date_col].max())
+
+    all_dates = pd.date_range(start=min_date, end=max_date, freq='D').to_frame(name='Date')
+
+    date_dimension = all_dates.reset_index(drop=True)
+    date_dimension[id_name] = range(1, len(date_dimension) + 1)
+    
+    df = pd.merge(df, date_dimension, left_on=start_date_col, right_on='Date', how='left')
+    df = df.rename(columns={id_name: f'{start_date_col}_id'}).drop(columns='Date')
+    
+    df = pd.merge(df, date_dimension, left_on=end_date_col, right_on='Date', how='left')
+    df = df.rename(columns={id_name: f'{end_date_col}_id'}).drop(columns='Date')
+    
+    return df, date_dimension
+
+
+# Function to generate incremental ID for specified columns and new dimensions
+##############################################################################
+def create_incremental_ids(df, column_names, id_column_name):
+    """
+    This function generates incremental IDs and can for unique combinations of values across multiple columns in a DataFrame.
+    """
+    unique_combinations = df[column_names].drop_duplicates().reset_index(drop=True)
+    unique_combinations[id_column_name] = range(1, len(unique_combinations) + 1)
+    df = pd.merge(df, unique_combinations, on=column_names, how='left')
+    df = df.drop(columns=column_names)
+    return df, unique_combinations
+
+
 if __name__=="__main__":
-    create_disaster_tables(connect_db())
+    create_disaster_tables(connect_db('disasters_dwh'))
+    get_data_from_db("""--sql
+                     SELECT * FROM staging_disasters;""",connect_db('staging_disasters'))
+    
+    

@@ -5,22 +5,29 @@ import csv
 import logging
 import os
 
-# Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define the path to the logs folder
-logs_dir = os.path.join(script_dir, 'logs')
+__all__ = [
+    'connect_db',
+    'get_columns_from_csv',
+    'create_staging_table',
+    'load_data_into_staging',
+    'process_csv_to_staging',
+]
 
-# Ensure the logs directory exists
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
+logger = logging.getLogger(__name__)
 
-# Configure logging to store logs in the logs folder
-logging.basicConfig(
-    filename=os.path.join(logs_dir, 'extract.log'),
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# # directory where the script is located
+# script_dir = os.getcwd()
+# # logs folder
+# logs_dir = os.path.join(script_dir, 'logs')
+# if not os.path.exists(logs_dir):
+#     os.makedirs(logs_dir)
+# # configuring logger to store logs in the logs folder
+# logger.basicConfig(
+#     filename=os.path.join(logs_dir, 'extract.log'),
+#     level=logger.DEBUG,
+#     format='%(asctime)s - %(levelname)s - %(message)s'
+# )
 
 
 # Connecting to PostgreSQL database
@@ -38,10 +45,10 @@ def connect_db():
             host=os.getenv('DB_HOST', 'localhost'),
             port=os.getenv('DB_PORT', 5432)
         )
-        logging.info("Connected to database successfully")
+        logger.info("Connected to database successfully")
         return conn
     except Exception as error:
-        logging.error(f"Error connecting to the database: {error}")
+        logger.error(f"Error connecting to the database: {error}")
         return None
 
 
@@ -56,10 +63,10 @@ def get_columns_from_csv(file_path):
         with open(file_path, 'r', encoding='utf-8', errors='replace') as file:
             reader = csv.reader(file)
             columns = next(reader)
-        logging.info(f"Extracted columns from CSV file {file_path} successfully")
+        logger.info(f"Extracted columns from CSV file {file_path} successfully")
         return columns
     except Exception as error:
-        logging.error(f"Error reading CSV file {file_path}: {error}")
+        logger.error(f"Error reading CSV file {file_path}: {error}")
         return []
 
 
@@ -83,9 +90,9 @@ def create_staging_table(cursor, table_name, columns):
         )
         
         cursor.execute(create_table_query)
-        logging.info(f"Created staging table {table_name} successfully")
+        logger.info(f"Created staging table {table_name} successfully")
     except Exception as error:
-        logging.error(f"Error creating table {table_name}: {error}")
+        logger.error(f"Error creating table {table_name}: {error}")
 
 
 # Loading the raw data into staging area
@@ -109,9 +116,9 @@ def load_data_into_staging(cursor, table_name, file_path, columns):
         )
         
         cursor.copy_expert(sql=copy_query, file=file_like_object)
-        logging.info(f"Data loaded into staging table {table_name} successfully")
+        logger.info(f"Data loaded into staging table {table_name} successfully")
     except Exception as error:
-        logging.error(f"Error loading data into staging table {table_name}: {error}")
+        logger.error(f"Error loading data into staging table {table_name}: {error}")
 
 
 # Main Function to process CSV files
@@ -125,7 +132,7 @@ def process_csv_to_staging(cursor, table_name, file_path):
         create_staging_table(cursor, table_name, columns)
         load_data_into_staging(cursor, table_name, file_path, columns)
     else:
-        logging.warning(f"No columns found for file {file_path}. Skipping processing.")
+        logger.warning(f"No columns found for file {file_path}. Skipping processing.")
 
 
 # Main execution flow
@@ -140,8 +147,8 @@ if __name__ == "__main__":
         conn.commit()
         cursor.close()
         conn.close()
-        logging.info("Database connection closed successfully")
+        logger.info("Database connection closed successfully")
     else:
-        logging.error("Failed to connect to the database.")
+        logger.error("Failed to connect to the database.")
 
 # have environment variables for the database connection.

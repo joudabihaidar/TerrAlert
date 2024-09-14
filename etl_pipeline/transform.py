@@ -10,64 +10,77 @@ from psycopg2 import sql
 import logging
 from datetime import datetime
 
-# Get the directory where the script is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define the path to the logs folder
-logs_dir = os.path.join(script_dir, 'logs')
+__all__ = [
+    'connect_db',
+    'get_data_from_db',
+    'clean_column_names',
+    'combine_date',
+    'compute_dates',
+    'duration_days',
+    'add_reverse_geocode_info',
+    'try_parsing_date',
+    'remove_duplicates',
+    'remove_columns',
+    'transform_data',
+]
 
-# Ensure the logs directory exists
-if not os.path.exists(logs_dir):
-    os.makedirs(logs_dir)
+logger = logging.getLogger(__name__)
 
-# Configure logging to store logs in the logs folder
-logging.basicConfig(
-    filename=os.path.join(logs_dir, 'transform.log'),
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+# # directory where the script is located
+# script_dir = os.getcwd()
+# # logs folder
+# logs_dir = os.path.join(script_dir, 'logs')
+# if not os.path.exists(logs_dir):
+#     os.makedirs(logs_dir)
+# # configuring logger to store logs in the logs folder
+# logger.basicConfig(
+#     filename=os.path.join(logs_dir, 'transform.log'),
+#     level=logger.DEBUG,
+#     format='%(asctime)s - %(levelname)s - %(message)s'
+# )
+
 
 # Connecting to PostgreSQL database
 ###################################
-def connect_db():
+def connect_db(dbname):
     """
     Connects to the PostgreSQL database.
     Returns a connection object if successful, or None if connection fails.
     """
     try:
         conn = psycopg2.connect(
-            dbname='staging_disasters',
+            dbname=dbname,
             user='postgres',
             password='Michel2003',
             host='localhost',
             port=5432
         )
-        logging.info("Connected to database successfully")
+        logger.info("Connected to database successfully")
         return conn
     except Exception as error:
-        logging.error(f"Error connecting to the database: {error}")
+        logger.error(f"Error connecting to the database: {error}")
         return None
 
 
 # Function to get data from PostgreSQL and load into a pandas DataFrame
 #######################################################################
-def get_data_from_db(query):
+def get_data_from_db(query,dbname):
     """
     Fetches data from the PostgreSQL database using the provided query.
     Cleans column names and returns the data as a pandas DataFrame.
     """
-    conn = connect_db()
+    conn = connect_db(dbname)
     if conn is None:
-        logging.error("Connection to database failed")
+        logger.error("Connection to database failed")
         return None
     
     try:
         df = pd.read_sql_query(query, conn)
-        df = clean_column_names(df)
-        logging.info(f"Data fetched successfully for query: {query}")
+        logger.info(f"Data fetched successfully for query: {query}")
         return df
     except Exception as error:
-        logging.error(f"Error fetching data: {error}")
+        logger.error(f"Error fetching data: {error}")
         return None
     finally:
         conn.close()
@@ -80,7 +93,7 @@ def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
     Cleans DataFrame column names by converting to lowercase and replacing spaces with underscores.
     """
     df.columns = df.columns.str.lower().str.replace(' ', '_')
-    logging.info("Column names cleaned")
+    logger.info("Column names cleaned")
     return df
 
 
@@ -95,7 +108,7 @@ def combine_date(year: int, month: int, day: int) -> pd.Timestamp:
         date_str = f"{int(year):04d}-{int(month):02d}-{int(day):02d}"
         return pd.to_datetime(date_str, errors='coerce')
     except (ValueError, TypeError):
-        logging.warning(f"Invalid date encountered: Year={year}, Month={month}, Day={day}")
+        logger.warning(f"Invalid date encountered: Year={year}, Month={month}, Day={day}")
         return pd.NaT
 
 
@@ -108,7 +121,7 @@ def compute_dates(df: pd.DataFrame, start_cols: list, end_cols: list, dataset_na
     """
     df['start_date'] = df.apply(lambda row: combine_date(row[start_cols[0]], row[start_cols[1]], row[start_cols[2]]), axis=1)
     df['end_date'] = df.apply(lambda row: combine_date(row[end_cols[0]], row[end_cols[1]], row[end_cols[2]]), axis=1)
-    logging.info(f"Start and end dates computed for {dataset_name} dataset")
+    logger.info(f"Start and end dates computed for {dataset_name} dataset")
     return df
 
 
@@ -120,7 +133,7 @@ def duration_days(df: pd.DataFrame, start_column: str, end_column: str, dataset_
     Adds a 'duration_days' column to the DataFrame.
     """
     df['duration_days'] = (df[end_column] - df[start_column]).dt.days
-    logging.info(f"Duration in days computed between {start_column} and {end_column} for {dataset_name} dataset")
+    logger.info(f"Duration in days computed between {start_column} and {end_column} for {dataset_name} dataset")
     return df
 
 
@@ -135,9 +148,9 @@ def add_reverse_geocode_info(df: pd.DataFrame, lat_col: str = 'dfo_centroid_y', 
         results = reverse_geocode.search(coords)
         geocode_df = pd.DataFrame(results)[['country', 'country_code', 'city', 'state']]
         df[['country', 'country_code', 'city', 'state']] = geocode_df
-        logging.info(f"Reverse geocoding information added for {dataset_name} dataset using columns {lat_col} and {lon_col}")
+        logger.info(f"Reverse geocoding information added for {dataset_name} dataset using columns {lat_col} and {lon_col}")
     except Exception as error:
-        logging.error(f"Error during reverse geocoding for {dataset_name} dataset: {error}")
+        logger.error(f"Error during reverse geocoding for {dataset_name} dataset: {error}")
     return df
 
 
@@ -150,56 +163,76 @@ def try_parsing_date(text: str) -> pd.Timestamp:
     try:
         return parser.parse(text)
     except (ValueError, TypeError):
-        logging.warning(f"Date parsing failed for text: {text}")
+        logger.warning(f"Date parsing failed for text: {text}")
         return pd.NaT
+    
 
-
-# Transform function that applies cleaning, transformations, and geocoding
-##########################################################################
-def transform_data(disasters: pd.DataFrame):#, floods: pd.DataFrame, storms: pd.DataFrame) -> tuple:
+# Function to remove duplicates from DataFrame
+################################################
+def remove_duplicates(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
     """
-    Transforms disasters, floods, and storms data by applying various transformations.
+    Removes duplicate rows from the DataFrame.
+    """
+    original_count = len(df)
+    df = df.drop_duplicates()
+    removed_count = original_count - len(df)
+    logger.info(f"Removed {removed_count} duplicates from {dataset_name} dataset")
+    return df
+
+
+# Function to remove specified columns from DataFrame
+#####################################################
+def remove_columns(df: pd.DataFrame, columns: list, dataset_name: str) -> pd.DataFrame:
+    """
+    Removes the specified columns from the DataFrame.
+    """
+    df = df.drop(columns=columns, errors='ignore')
+    logger.info(f"Removed columns {columns} from {dataset_name} dataset")
+    return df
+
+
+# Transform function that applies cleaning, transformations, geocoding, duplicates, and column removal
+#######################################################################################################
+def transform_data(disasters: pd.DataFrame, columns_to_remove: list = None): 
+    """
+    Transforms disasters  data by applying various transformations.
+    Removes duplicates and specific columns if provided.
     Returns the transformed DataFrames.
     """
     try:
         # Process disasters DataFrame
+        disasters = clean_column_names(disasters)
         disasters = compute_dates(disasters, ['start_year', 'start_month', 'start_day'], ['end_year', 'end_month', 'end_day'], 'disasters')
         disasters = duration_days(disasters, 'start_date', 'end_date', 'disasters')
-        logging.info("Disasters data transformation completed")
+        
+        # Remove duplicates
+        disasters = remove_duplicates(disasters, 'disasters')
+        
+        # Remove specified columns
+        if columns_to_remove:
+            disasters = remove_columns(disasters, columns_to_remove, 'disasters')
 
-        # # Process floods DataFrame
-        # floods = add_reverse_geocode_info(floods, dataset_name='floods')
-        # floods['dfo_began'] = floods['dfo_began'].apply(try_parsing_date)
-        # floods['dfo_ended'] = floods['dfo_ended'].apply(try_parsing_date)
-        # floods = duration_days(floods, 'dfo_began', 'dfo_ended', 'floods')
-        # logging.info("Floods data transformation completed")
-
-        # # Process storms DataFrame
-        # storms = clean_column_names(storms)
-        # storms = add_reverse_geocode_info(storms, 'lat', 'long', 'storms')
-        # storms = compute_dates(storms, ['year', 'month', 'day'], ['year', 'month', 'day'], 'storms')
-        # logging.info("Storms data transformation completed")
-
-        return disasters#, floods, storms
+        logger.info("Disasters data transformation completed")
+        return disasters
     except Exception as error:
-        logging.error(f"Error during data transformation: {error}")
-        return disasters#, floods, storms
+        logger.error(f"Error during data transformation: {error}")
+        return disasters
 
-if __name__ == "__main__":
-    # Fetch data
-    current_date = datetime.now().strftime("%Y%m%d")
-    disasters = get_data_from_db( f""" --sql
-    SELECT * FROM staging_disasters 
-    WHERE TO_CHAR(extraction_time, 'YYYYMMDD') = '{current_date}';
-    """)
-    # floods = get_data_from_db("SELECT * FROM staging_floods;")
-    # storms = get_data_from_db("SELECT * FROM staging_storms;")
 
-    # Apply transformations
-    if disasters is not None: # and floods is not None and storms is not None:
-        transformed_disasters= transform_data(disasters)#, floods, storms)
-    else:
-        logging.error("Data fetch failed. Transformations not applied.")
+# if __name__ == "__main__":
+    # # Fetching data
+    # current_date = datetime.now().strftime("%Y%m%d")
+    # disasters = get_data_from_db( f""" --sql
+    # SELECT * FROM staging_disasters 
+    # WHERE TO_CHAR(extraction_time, 'YYYYMMDD') = '{current_date}';
+    # """,'disasters_staging')
+    # columns_to_remove=['Local Time','River Basin','Admin1 Code','Admin2 Code','Geo Locations']    
+
+    # # Applying transformations
+    # if disasters is not None: 
+    #     transformed_disasters= transform_data(disasters,columns_to_remove)
+    # else:
+    #     logger.error("Data fetch failed. Transformations not applied.")
 
     
     
