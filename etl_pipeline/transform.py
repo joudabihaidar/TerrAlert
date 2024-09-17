@@ -42,20 +42,21 @@ logger = logging.getLogger(__name__)
 # )
 
 
+
 # Connecting to PostgreSQL database
 ###################################
-def connect_db(dbname):
+def connect_db():
     """
     Connects to the PostgreSQL database.
     Returns a connection object if successful, or None if connection fails.
     """
     try:
         conn = psycopg2.connect(
-            dbname=dbname,
-            user='postgres',
-            password='Michel2003',
-            host='localhost',
-            port=5432
+            dbname=os.getenv('DB_NAME', 'staging_disasters'),
+            user=os.getenv('DB_USER', 'postgres'),
+            password=os.getenv('DB_PASSWORD'),
+            host=os.getenv('DB_HOST', 'localhost'),
+            port=os.getenv('DB_PORT', 5432)
         )
         logger.info("Connected to database successfully")
         return conn

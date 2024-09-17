@@ -15,27 +15,27 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
 
     try:
-    #     ###########
-    #     # Extract #
-    #     ###########
+        ###########
+        # Extract #
+        ###########
 
-    #     logger.info("Starting extraction process...")
+        logger.info("Starting extraction process...")
 
-    #     # Connect to database
-    #     conn = connect_db('staging_disasters')
-    #     if conn:
-    #         cursor = conn.cursor()
+        # Connect to database
+        conn = connect_db('staging_disasters')
+        if conn:
+            cursor = conn.cursor()
 
-    #         # Process CSV file and load data into staging table
-    #         process_csv_to_staging(cursor, "staging_disasters", r"C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv")
+            # Process CSV file and load data into staging table
+            process_csv_to_staging(cursor, "staging_disasters", r"C:\Users\Legion\Desktop\official_data\1900_2021_DISASTERS.csv")
 
-    #         conn.commit()
-    #         cursor.close()
-    #         conn.close()
+            conn.commit()
+            cursor.close()
+            conn.close()
 
-    #         logger.info("Extraction completed successfully.")
-    #     else:
-    #         logger.error("Database connection failed.")
+            logger.info("Extraction completed successfully.")
+        else:
+            logger.error("Database connection failed.")
         
 
         
