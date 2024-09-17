@@ -60,7 +60,10 @@
 
 
 ### User Screens (Mobile)
-| Login screen  | Register screen | Landing screen | Loading screen |
+| Landing Page  | Map Overview | 
+| ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | 
+| Country Details | Sneak Peak |
+| ![fsdaf](./readme/country_drill_through.png) | ![fsdaf](./readme/sneek_peak.png) |
 | ---| ---| ---| ---|
 | ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | ![fsdaf](./readme/country_drill_through.png) | ![fsdaf](./readme/sneek_peak.png) |
 | Home screen  | Menu Screen | Order Screen | Checkout Screen |
