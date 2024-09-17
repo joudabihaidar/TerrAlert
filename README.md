@@ -54,6 +54,14 @@
 | --------------------------------- | -------------------------------------- |
 | ![Demo](./readme/country_drill_through.png) | ![Demo](./readme/sneek_peak.png) |
 
+### User Screens (Python)
+
+| Real Time Earthquake Monitoring                          | 
+| ----------------------------------------- | 
+| ![Demo](./readme/earthquake.png) |
+
+
+
 <!-- | Disease Analysis Screen             | Decomposition Tree Screen         |
 | ----------------------------------- | --------------------------------- |
 | ![Demo](./readme/assets/da_1_1.gif) | ![Demo](./readme/assets/dt_1.gif) | -->
