@@ -61,31 +61,8 @@
 | ![Demo](./readme/earthquake.png) |
 
 
-
-<!-- | Disease Analysis Screen             | Decomposition Tree Screen         |
-| ----------------------------------- | --------------------------------- |
-| ![Demo](./readme/assets/da_1_1.gif) | ![Demo](./readme/assets/dt_1.gif) | -->
-
 <br><br>
 
-
-<!-- Prompt Engineering -->
-<img src="./readme/title7.svg"/>
-
-###  Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
-
-- This project uses advanced prompt engineering techniques to optimize the interaction with natural language processing models. By skillfully crafting input instructions, we tailor the behavior of the models to achieve precise and efficient language understanding and generation for various tasks and preferences.
-
-<br><br>
-
-<!-- AWS Deployment -->
-<img src="./readme/title8.svg"/>
-
-###  Efficient AI Deployment: Unleashing the Potential with AWS Integration:
-
-- This project leverages AWS deployment strategies to seamlessly integrate and deploy natural language processing models. With a focus on scalability, reliability, and performance, we ensure that AI applications powered by these models deliver robust and responsive solutions for diverse use cases.
-
-<br><br>
 
 <!-- Unit Testing -->
 <img src="./readme/title9.svg"/>
