@@ -37,11 +37,11 @@
 
 
 ### Mockups
-| Home screen  | Menu Screen | Order Screen |
+| Landing Page  | Map Overview | 
+Country Drill Through | Sneak Peak
 | ---| ---| ---|
 | ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) |
- ![fsdaf](./readme/country_drill_through.png) |
-  ![fsdaf](./readme/sneek_peak.png)
+ ![fsdaf](./readme/country_drill_through.png) |![fsdaf](./readme/sneek_peak.png)
 
 <br><br>
 
