@@ -38,9 +38,9 @@
 
 ### Mockups
 | Home screen  | Menu Screen | Order Screen |
-
+<!-- 
 | ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) |
- ![fsdaf](./readme/country_drill_through.png) |![fsdaf](./readme/sneek_peak.png)
+ ![fsdaf](./readme/country_drill_through.png) |![fsdaf](./readme/sneek_peak.png) -->
 
 <br><br>
 
@@ -60,14 +60,11 @@
 
 
 ### User Screens (Mobile)
-| Landing Page  | Map Overview | 
-| ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | 
-| Country Details | Sneak Peak |
-| ![fsdaf](./readme/country_drill_through.png) | ![fsdaf](./readme/sneek_peak.png) |
+| Login screen  | Register screen | 
 | ---| ---| ---| ---|
 | ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | ![fsdaf](./readme/country_drill_through.png) | ![fsdaf](./readme/sneek_peak.png) |
-| Home screen  | Menu Screen | Order Screen | Checkout Screen |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
+<!-- | Home screen  | Menu Screen | Order Screen | Checkout Screen |
+| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
 
 ### Admin Screens (Web)
 | Login screen  | Register screen |  Landing screen |
