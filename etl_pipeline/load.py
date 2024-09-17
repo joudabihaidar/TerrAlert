@@ -2,6 +2,7 @@ import psycopg2
 import logging
 import os
 import pandas as pd
+import re
 
 
 logger = logging.getLogger(__name__)
@@ -41,11 +42,11 @@ def create_disaster_tables(conn):
         # dim_disaster_groups
         try:
             logging.info("Creating table: dim_disaster_groups")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_disaster_groups (
-                id INT PRIMARY KEY,
+                id VARCHAR PRIMARY KEY,
                 name VARCHAR,
-                parent_id INT REFERENCES dim_disaster_groups(id)
+                parent_id VARCHAR REFERENCES dim_disaster_groups(id)
             );
             """)
             logging.info("Table dim_disaster_groups created successfully.")
@@ -55,11 +56,11 @@ def create_disaster_tables(conn):
         # dim_disaster_types
         try:
             logging.info("Creating table: dim_disaster_types")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_disaster_types (
-                id INT PRIMARY KEY,
+                id VARCHAR PRIMARY KEY,
                 name VARCHAR,
-                parent_id INT REFERENCES dim_disaster_types(id)
+                parent_id VARCHAR REFERENCES dim_disaster_types(id)
             );
             """)
             logging.info("Table dim_disaster_types created successfully.")
@@ -69,9 +70,9 @@ def create_disaster_tables(conn):
         # dim_disaster_names
         try:
             logging.info("Creating table: dim_disaster_names")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_disaster_names (
-                name_id INT PRIMARY KEY,
+                name_id VARCHAR PRIMARY KEY,
                 event_name VARCHAR
             );
             """)
@@ -82,16 +83,14 @@ def create_disaster_tables(conn):
         # dim_locations
         try:
             logging.info("Creating table: dim_locations")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_locations (
-                location_id INT PRIMARY KEY,
+                location_id VARCHAR PRIMARY KEY,
                 country VARCHAR,
                 ISO VARCHAR,
                 region VARCHAR,
                 continent VARCHAR,
-                location VARCHAR,
-                latitude DOUBLE PRECISION,
-                longitude DOUBLE PRECISION
+                location VARCHAR
             );
             """)
             logging.info("Table dim_locations created successfully.")
@@ -101,10 +100,10 @@ def create_disaster_tables(conn):
         # dim_dates
         try:
             logging.info("Creating table: dim_dates")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_dates (
-                date_id INT PRIMARY KEY,
-                disaster_date DATE
+                date_id VARCHAR PRIMARY KEY,
+                date DATE
             );
             """)
             logging.info("Table dim_dates created successfully.")
@@ -114,11 +113,11 @@ def create_disaster_tables(conn):
         # dim_associated_distructions
         try:
             logging.info("Creating table: dim_associated_distructions")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_associated_distructions (
-                associated_dis_id INT PRIMARY KEY,
+                id VARCHAR PRIMARY KEY,
                 name VARCHAR,
-                parent_id INT REFERENCES dim_associated_distructions(associated_dis_id)
+                parent_id VARCHAR REFERENCES dim_associated_distructions(id)
             );
             """)
             logging.info("Table dim_associated_distructions created successfully.")
@@ -128,9 +127,9 @@ def create_disaster_tables(conn):
         # dim_ofda_responses
         try:
             logging.info("Creating table: dim_ofda_responses")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_ofda_responses (
-                OFDA_resp_id INT PRIMARY KEY,
+                OFDA_resp_id VARCHAR PRIMARY KEY,
                 ofda_response VARCHAR
             );
             """)
@@ -141,9 +140,9 @@ def create_disaster_tables(conn):
         # dim_appeals
         try:
             logging.info("Creating table: dim_appeals")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_appeals (
-                appeal_id INT PRIMARY KEY,
+                appeal_id VARCHAR PRIMARY KEY,
                 appeal VARCHAR
             );
             """)
@@ -154,9 +153,9 @@ def create_disaster_tables(conn):
         # dim_declarations
         try:
             logging.info("Creating table: dim_declarations")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_declarations (
-                declaration_id INT PRIMARY KEY,
+                declaration_id VARCHAR PRIMARY KEY,
                 declaration VARCHAR
             );
             """)
@@ -167,9 +166,9 @@ def create_disaster_tables(conn):
         # dim_mag_scales
         try:
             logging.info("Creating table: dim_mag_scales")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_mag_scales (
-                dis_mag_scale_id INT PRIMARY KEY,
+                dis_mag_scale_id VARCHAR PRIMARY KEY,
                 dis_mag_scale VARCHAR
             );
             """)
@@ -180,9 +179,9 @@ def create_disaster_tables(conn):
         # dim_adm_levels
         try:
             logging.info("Creating table: dim_adm_levels")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_adm_levels (
-                adm_level_id INT PRIMARY KEY,
+                adm_level_id VARCHAR PRIMARY KEY,
                 adm_level VARCHAR
             );
             """)
@@ -193,9 +192,9 @@ def create_disaster_tables(conn):
         # dim_disasters_origin
         try:
             logging.info("Creating table: dim_disasters_origin")
-            cur.execute("""
+            cur.execute("""--sql
             CREATE TABLE IF NOT EXISTS dim_disasters_origin (
-                origin_id INT PRIMARY KEY,
+                origin_id VARCHAR PRIMARY KEY,
                 origin VARCHAR
             );
             """)
@@ -206,35 +205,36 @@ def create_disaster_tables(conn):
         # fact_disasters
         try:
             logging.info("Creating table: fact_disasters")
-            cur.execute("""
+            cur.execute(""" --sql
                 CREATE TABLE IF NOT EXISTS fact_disasters (
-                id INT PRIMARY KEY,
-                seq INT,
+                id VARCHAR PRIMARY KEY ,
+                seq BIGINT,
                 glide VARCHAR,
-                aid_contribution INT,
-                dis_mag_value INT,
-                starting_date_id INT REFERENCES dim_dates(date_id),
-                ending_date_id INT REFERENCES dim_dates(date_id),
-                total_deaths INT,
-                no_injured INT,
-                no_affected INT,
-                no_homeless INT,
-                total_affected INT,
+                aid_contribution BIGINT,
+                dis_mag_value BIGINT,
+                total_deaths BIGINT,
+                no_injured BIGINT,
+                no_affected BIGINT,
+                no_homeless BIGINT,
+                total_affected BIGINT,
                 insured_damages DOUBLE PRECISION,
                 total_damages DOUBLE PRECISION,
                 cpi DOUBLE PRECISION,
-                adm_level_id INT REFERENCES dim_adm_levels(adm_level_id),
-                location_id INT REFERENCES dim_locations(location_id),
-                group_id INT REFERENCES dim_disaster_groups(id),
-                type_id INT REFERENCES dim_disaster_types(id),
-                associated_dis_id INT REFERENCES dim_associated_distructions(associated_dis_id),
-                name_id INT REFERENCES dim_disaster_names(name_id),
-                OFDA_resp_id INT REFERENCES dim_ofda_responses(OFDA_resp_id),
-                appeal_id INT REFERENCES dim_appeals(appeal_id),
-                declaration_id INT REFERENCES dim_declarations(declaration_id),
-                dis_mag_scale_id INT REFERENCES dim_mag_scales(dis_mag_scale_id),
-                origin_id INT REFERENCES dim_disasters_origin(origin_id),
-                duration INT
+                extraction_time DATE,
+                duration_days BIGINT,
+                type_id VARCHAR REFERENCES dim_disaster_types(id),
+                group_id VARCHAR REFERENCES dim_disaster_groups(id),
+                associated_dis_id VARCHAR REFERENCES dim_associated_distructions(id),
+                location_id VARCHAR REFERENCES dim_locations(location_id),
+                name_id VARCHAR REFERENCES dim_disaster_names(name_id),
+                OFDA_resp_id VARCHAR REFERENCES dim_ofda_responses(OFDA_resp_id),
+                appeal_id VARCHAR REFERENCES dim_appeals(appeal_id),
+                declaration_id VARCHAR REFERENCES dim_declarations(declaration_id),
+                dis_mag_scale_id VARCHAR REFERENCES dim_mag_scales(dis_mag_scale_id),
+                adm_level_id VARCHAR REFERENCES dim_adm_levels(adm_level_id),
+                origin_id VARCHAR REFERENCES dim_disasters_origin(origin_id),
+                starting_date_id VARCHAR REFERENCES dim_dates(date_id),
+                ending_date_id VARCHAR REFERENCES dim_dates(date_id)
             );
             """)
             logging.info("Table fact_disasters created successfully.")
@@ -328,37 +328,54 @@ def generate_date_ids(df, start_date_col, end_date_col, id_name='date_id'):
     to replace dates with their corresponding IDs, and creates a new DataFrame with 
     all unique dates and their IDs.
     """
-
-    df[start_date_col] = pd.to_datetime(df[start_date_col])
-    df[end_date_col] = pd.to_datetime(df[end_date_col])
+    # Convert date columns to datetime, handling invalid parsing as NaT
+    df[start_date_col] = pd.to_datetime(df[start_date_col], errors='coerce')
+    df[end_date_col] = pd.to_datetime(df[end_date_col], errors='coerce')
     
+    # Determine the min and max dates
     min_date = min(df[start_date_col].min(), df[end_date_col].min())
     max_date = max(df[start_date_col].max(), df[end_date_col].max())
 
-    all_dates = pd.date_range(start=min_date, end=max_date, freq='D').to_frame(name='Date')
+    # Create a DataFrame with all dates in the range
+    all_dates = pd.date_range(start=min_date, end=max_date, freq='D').to_frame(name='date')
 
+    # Create the date_dimension DataFrame with IDs
     date_dimension = all_dates.reset_index(drop=True)
     date_dimension[id_name] = range(1, len(date_dimension) + 1)
+    date_dimension[id_name] = date_dimension[id_name].astype(int)
     
-    df = pd.merge(df, date_dimension, left_on=start_date_col, right_on='Date', how='left')
-    df = df.rename(columns={id_name: f'{start_date_col}_id'}).drop(columns='Date')
+    # Merge date IDs into the original DataFrame for start_date_col
+    df = pd.merge(df, date_dimension, left_on=start_date_col, right_on='date', how='left')
+    df = df.rename(columns={id_name: f'{start_date_col}_id'}).drop(columns='date')
     
-    df = pd.merge(df, date_dimension, left_on=end_date_col, right_on='Date', how='left')
-    df = df.rename(columns={id_name: f'{end_date_col}_id'}).drop(columns='Date')
+    # Merge date IDs into the original DataFrame for end_date_col
+    df = pd.merge(df, date_dimension, left_on=end_date_col, right_on='date', how='left')
+    df = df.rename(columns={id_name: f'{end_date_col}_id'}).drop(columns='date')
+    
+    # Drop rows where IDs are NaN
+    df = df.dropna(subset=[f'{start_date_col}_id', f'{end_date_col}_id'])
+    
+    # Ensure IDs are integers
+    df[f'{start_date_col}_id'] = df[f'{start_date_col}_id'].astype(int)
+    df[f'{end_date_col}_id'] = df[f'{end_date_col}_id'].astype(int)
     
     return df, date_dimension
-
 
 # Function to generate incremental ID for specified columns and new dimensions
 ##############################################################################
 def create_incremental_ids(df, column_names, id_column_name):
     """
-    This function generates incremental IDs and can for unique combinations of values across multiple columns in a DataFrame.
+    This function generates incremental IDs for unique combinations of values across multiple columns in a DataFrame
+    and ensures the IDs appear as the first column in the unique_combinations DataFrame.
     """
     unique_combinations = df[column_names].drop_duplicates().reset_index(drop=True)
     unique_combinations[id_column_name] = range(1, len(unique_combinations) + 1)
+    
+    unique_combinations = unique_combinations[[id_column_name] + [col for col in unique_combinations.columns if col != id_column_name]]
     df = pd.merge(df, unique_combinations, on=column_names, how='left')
+    
     df = df.drop(columns=column_names)
+    
     return df, unique_combinations
 
 
@@ -376,39 +393,60 @@ def add_id_column(df, id_column_name='id'):
 # this function will take a dataframe and start spiltting it into the wanted dimensions
 #######################################################################################
 def generate_dimensions(df):
+    df=add_id_column(df,'id')
     dim_disaster_types, df = create_hierarchy(df, ['disaster_type', 'disaster_subtype', 'disaster_subsubtype'],'type_id')
     dim_disaster_groups ,df= create_hierarchy(df,['disaster_group', 'disaster_subgroup'],'group_id')
     dim_associated_distructions, df=create_hierarchy(df,['associated_dis', 'associated_dis2'],'associated_dis_id')
     
-    df, dim_locations=create_incremental_ids(df,['country', 'iso', 'region', 'continent', 'location','latitude','longitude'],'location_id')
+    df, dim_locations=create_incremental_ids(df,['country', 'iso', 'region', 'continent', 'location'],'location_id')
     df, dim_disaster_names=create_incremental_ids(df,['event_name'],'name_id')
-    df, dim_ofda_responses=create_incremental_ids(df,['ofda_response'],'OFDA_resp_id')
+    df, dim_ofda_responses=create_incremental_ids(df,['ofda_response'],'ofda_resp_id')
     df, dim_appeals=create_incremental_ids(df,['appeal'],'appeal_id')
     df, dim_declarations=create_incremental_ids(df,['declaration'],'declaration_id')
     df, dim_mag_scales=create_incremental_ids(df,['dis_mag_scale'],'dis_mag_scale_id')
     df, dim_adm_levels=create_incremental_ids(df,['adm_level'],'adm_level_id')
     df, dim_disasters_origin=create_incremental_ids(df,['origin'],'origin_id')
-    df, dim_dates=generate_date_ids(df,'start_date','end_date','date_id')
+    df, dim_dates=generate_date_ids(df,'starting_date','ending_date','date_id')
     return df, dim_disaster_types, dim_disaster_groups, dim_associated_distructions, dim_locations, dim_disaster_names, dim_ofda_responses, dim_appeals, dim_declarations, dim_mag_scales, dim_adm_levels,dim_disasters_origin,dim_dates
 
 
-import pandas as pd
-import psycopg2
-
 def load_dataframe_to_db(df, table_name, conn):
     """
-    Load a DataFrame into a specified table in the database.
+    Load a DataFrame into a specified table in the database using psycopg2, 
+    handling special characters in column names by sanitizing them.
     """
     if df.empty:
-        print(f"No data to load for table: {table_name}")
+        logging.warning(f"No data to load for table: {table_name}")
         return
 
     try:
-        df.to_sql(table_name, conn, if_exists='append', index=False)
-        print(f"Data loaded into table: {table_name}")
+        # Create a cursor object
+        cursor = conn.cursor()
+
+        # Sanitize column names: replace invalid characters with underscores
+        df.columns = [re.sub(r"[^\w]", "_", col) for col in df.columns]
+
+        # Generate SQL query
+        columns = ', '.join([f'"{col}"' for col in df.columns])  # Add double quotes around column names
+        values = ', '.join(['%s'] * len(df.columns))
+        insert_query = f"INSERT INTO {table_name} ({columns}) VALUES ({values})"
+
+        # Convert DataFrame rows to list of tuples
+        data = [tuple(row) for row in df.to_numpy()]
+
+        # Execute batch insert
+        cursor.executemany(insert_query, data)
+        
+        # Commit changes
+        conn.commit()
+        logging.info(f"Data successfully loaded into table: {table_name}")
+        
     except Exception as e:
-        print(f"Error loading data into table {table_name}: {e}")
+        logging.error(f"Error loading data into table {table_name}: {e}")
+        conn.rollback()  # Rollback in case of error
         raise
+    finally:
+        cursor.close()  # Close cursor
 
 def load_fact_disasters(df, conn):
     load_dataframe_to_db(df, 'fact_disasters', conn)

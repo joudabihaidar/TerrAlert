@@ -23,6 +23,7 @@ __all__ = [
     'remove_duplicates',
     'remove_columns',
     'transform_data',
+    'rename_column'
 ]
 
 logger = logging.getLogger(__name__)
@@ -119,9 +120,17 @@ def compute_dates(df: pd.DataFrame, start_cols: list, end_cols: list, dataset_na
     Computes the start and end dates based on year, month, and day columns in the DataFrame.
     Adds 'start_date' and 'end_date' columns to the DataFrame.
     """
-    df['start_date'] = df.apply(lambda row: combine_date(row[start_cols[0]], row[start_cols[1]], row[start_cols[2]]), axis=1)
-    df['end_date'] = df.apply(lambda row: combine_date(row[end_cols[0]], row[end_cols[1]], row[end_cols[2]]), axis=1)
+    df['starting_date'] = df.apply(lambda row: combine_date(row[start_cols[0]], row[start_cols[1]], row[start_cols[2]]), axis=1)
+    df['ending_date'] = df.apply(lambda row: combine_date(row[end_cols[0]], row[end_cols[1]], row[end_cols[2]]), axis=1)
     logger.info(f"Start and end dates computed for {dataset_name} dataset")
+    return df
+
+
+def rename_column(df, old_name, new_name):
+    """
+    Renames a column in a pandas DataFrame.
+    """
+    df = df.rename(columns={old_name: new_name})
     return df
 
 
@@ -200,13 +209,14 @@ def transform_data(disasters: pd.DataFrame, columns_to_remove: list = None):
     Returns the transformed DataFrames.
     """
     try:
+
+        # Remove duplicates
+        disasters = remove_duplicates(disasters, 'disasters')
+
         # Process disasters DataFrame
         disasters = clean_column_names(disasters)
         disasters = compute_dates(disasters, ['start_year', 'start_month', 'start_day'], ['end_year', 'end_month', 'end_day'], 'disasters')
-        disasters = duration_days(disasters, 'start_date', 'end_date', 'disasters')
-        
-        # Remove duplicates
-        disasters = remove_duplicates(disasters, 'disasters')
+        disasters = duration_days(disasters, 'starting_date', 'ending_date', 'disasters')
         
         # Remove specified columns
         if columns_to_remove:
