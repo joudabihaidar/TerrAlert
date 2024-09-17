@@ -27,22 +27,7 @@
 - The app uses the font ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) as its main font, and the design of the app adheres to the material design guidelines.
 
 <br><br>
-<!-- UI UX -->
-<img src="./readme/title4.svg"/>
 
-
-> We designed Coffee Express using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
-
-- Project Figma design [figma](https://www.figma.com/file/LsuOx5Wnh5YTGSEtrgvz4l/Purrfect-Pals?type=design&node-id=257%3A79&mode=design&t=adzbABt5hbb91ucZ-1)
-
-
-### Mockups
-| Home screen  | Menu Screen | Order Screen |
-<!-- 
-| ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) |
- ![fsdaf](./readme/country_drill_through.png) |![fsdaf](./readme/sneek_peak.png) -->
-
-<br><br>
 
 <!-- Database Design -->
 <img src="./readme/title5.svg"/>
@@ -59,19 +44,19 @@
 <img src="./readme/title6.svg"/>
 
 
-### User Screens (Mobile)
-| Login screen  | Register screen | 
-| ---| ---| ---| ---|
-| ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | ![fsdaf](./readme/country_drill_through.png) | ![fsdaf](./readme/sneek_peak.png) |
-<!-- | Home screen  | Menu Screen | Order Screen | Checkout Screen |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | -->
+### User Screens (Power BI report)
 
-### Admin Screens (Web)
-| Login screen  | Register screen |  Landing screen |
-| ---| ---| ---|
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
-| Home screen  | Menu Screen | Order Screen |
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+| Overview screen                           | Line Chart                                |
+| ----------------------------------------- | ----------------------------------------- |
+| ![Demo](./readme/landing_page.png) | ![Demo](./readme/map_overview.png) |
+
+| Personal Analysis Screen          | Sctter Screen                          |
+| --------------------------------- | -------------------------------------- |
+| ![Demo](./readme/country_drill_through.png) | ![Demo](./readme/sneek_peak.png) |
+
+<!-- | Disease Analysis Screen             | Decomposition Tree Screen         |
+| ----------------------------------- | --------------------------------- |
+| ![Demo](./readme/assets/da_1_1.gif) | ![Demo](./readme/assets/dt_1.gif) | -->
 
 <br><br>
 
