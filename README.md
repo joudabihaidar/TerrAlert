@@ -39,7 +39,8 @@
 ### Mockups
 | Home screen  | Menu Screen | Order Screen |
 | ---| ---| ---|
-| ![Landing](./readme/landing_page.png) | ![fsdaf](./readme/map_overview.png) | ![fsdaf](./readme/country_drill_through.png) |
+| ![Landing](./readme/landing_page.png) |
+![fsdaf](./readme/map_overview.png) | ![fsdaf](./readme/country_drill_through.png) |
 
 <br><br>
 
