@@ -46,11 +46,11 @@
 
 ### User Screens (Power BI report)
 
-| Overview screen                           | Line Chart                                |
+| Landing Page                          | Map Overview                                |
 | ----------------------------------------- | ----------------------------------------- |
 | ![Demo](./readme/landing_page.png) | ![Demo](./readme/map_overview.png) |
 
-| Personal Analysis Screen          | Sctter Screen                          |
+| Country-Specific Drill-Through          | Sneak Peek                          |
 | --------------------------------- | -------------------------------------- |
 | ![Demo](./readme/country_drill_through.png) | ![Demo](./readme/sneek_peak.png) |
 
