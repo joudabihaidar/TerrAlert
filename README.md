@@ -75,6 +75,8 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 | Logs                        | 
 | ----------------------------------------- | 
 | ![Demo](./readme/earthquake.png) |
+
+
 <br><br>
 
 
