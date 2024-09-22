@@ -12,9 +12,9 @@
 > While the current version focuses on data processing and visualization, future updates will enhance TerrAlert’s ability to automatically detect high-risk areas and predict zones prone to disasters, getting closer to achieving the full vision of the system.
 
 ### User Stories
-- As a user, I want to browse the menu, so I can find my favorite coffee drinks.
-- As a user, I want to customize my order, so I can add or remove ingredients according to my preferences.
-- As a user, I want to pay for my order through the app, so I can avoid waiting in line at the store.
+- As a disaster relief coordinator, I want to monitor real-time earthquake data to quickly identify affected regions in need of aid.
+- As an analyst, I want to explore historical records of natural disasters to understand trends, impacts, and the responses taken.
+- As a data engineer, I want to build a scalable ETL pipeline to continuously update and manage disaster-related data for analysis.
 
 <br><br>
 <!-- Tech stack -->
