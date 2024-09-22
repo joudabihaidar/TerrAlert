@@ -85,20 +85,21 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 <!-- How to run -->
 <img src="./readme/title10.svg"/>
 
-> To set up Coffee Express locally, follow these steps:
+> To set up the TerrAlert locally, follow these steps:
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Make sure to have the following dependencies installed:
+
+- Python 3.x
+- PostgreSQL
+- Required Python libraries (listed in requirements.txt)
 
 ### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
+1. Clone the repository:
+   ```
+      git clone [github](https://github.com/your_username_/TerrAlert.git)
+   ```
 1. Get a free API Key at [example](https://example.com)
 2. Clone the repo
    git clone [github](https://github.com/your_username_/Project-Name.git)
