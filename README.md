@@ -33,7 +33,8 @@
 <!-- Database Design -->
 <img src="./readme/title5.svg"/>
 
-###  Architecting Data Excellence: Innovative Database Design Strategies:
+###  Star Schema:
+The star schema for TerrAlert offers several advantages, including simplicity, as its clear structure with a central fact table and surrounding dimension tables makes data access intuitive and easy to navigate. It provides improved performance for queries on large datasets, crucial for analyzing both historical records and real-time data.
 
 <img src="./readme/ER_Diagram.png"/>
 
