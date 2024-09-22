@@ -91,25 +91,16 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 
 Make sure to have the following dependencies installed:
 
-- Python 3.x
 - PostgreSQL
 - Required Python libraries (listed in requirements.txt)
 
 ### Installation
 1. Clone the repository:
    ```
-      git clone [github](https://github.com/your_username_/TerrAlert.git)
+      git clone https://github.com/joudabihaidar/TerrAlert.git
    ```
-1. Get a free API Key at [example](https://example.com)
-2. Clone the repo
-   git clone [github](https://github.com/your_username_/Project-Name.git)
-3. Install NPM packages
-   ```sh
-   npm install
+2. Install the necessary Python libraries:
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+      pip install -r requirements.txt
    ```
-
-Now, you should be able to run Coffee Express locally and explore its features.
+Now, you should be able to run the project locally and explore its features.
