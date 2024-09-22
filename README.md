@@ -72,6 +72,7 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 ###  Precision in Development: Harnessing the Power of Unit Testing:
 
 - Data validation ensures the accuracy of the ETL process through detailed logging. During extraction, logs track data sources and any access issues. In transformation, they document processing steps and validation checks. The loading phase logs capture the success of data uploads and any conflicts. These logs are essential for monitoring data flow and maintaining data quality, ensuring the final dataset is reliable for analysis.
+<br><br>
 | Logs                        | 
 | ----------------------------------------- | 
 | ![Demo](./readme/earthquake.png) |
