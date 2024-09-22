@@ -12,7 +12,7 @@
 > While the current version focuses on data processing and visualization, future updates will enhance TerrAlert’s ability to automatically detect high-risk areas and predict zones prone to disasters, getting closer to achieving the full vision of the system.
 
 ### User Stories
-- As a disaster relief coordinator, I want to monitor real-time earthquake data to quickly identify affected regions in need of aid.
+- As a disaster relief coordinator, I want to monitor real-time data to quickly identify affected regions in need of aid.
 - As an analyst, I want to explore historical records of natural disasters to understand trends, impacts, and the responses taken.
 - As a data engineer, I want to build a scalable ETL pipeline to continuously update and manage disaster-related data for analysis.
 
@@ -20,13 +20,12 @@
 <!-- Tech stack -->
 <img src="./readme/title3.svg"/>
 
-###  Coffee Express is built using the following technologies:
+###  TerrAlert is built using the following technologies:
 
-- This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows us to use a single codebase for apps on mobile, desktop, and the web.
-- For persistent storage (database), the app uses the [Hive](https://hivedb.dev/) package which allows the app to create a custom storage schema and save it to a local database.
-- To send local push notifications, the app uses the [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) package which supports Android, iOS, and macOS.
-  - 🚨 Currently, notifications aren't working on macOS. This is a known issue that we are working to resolve!
-- The app uses the font ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) as its main font, and the design of the app adheres to the material design guidelines.
+- Python for developing the ETL pipeline and integrating real-time data using the USGS API for earthquake data.
+- PostgreSQL as a data warehouse for efficient storage of both real-time and historical disaster data, enabling complex queries and analysis.
+- Power BI for creating interactive dashboards to analyze the human and economic impacts of disasters.
+- Plotly for real-time visualization of earthquake data, providing a dynamic map of earthquake locations and their magnitudes.
 
 <br><br>
 
