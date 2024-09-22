@@ -5,9 +5,11 @@
 <!-- project philosophy -->
 <img src="./readme/title2.svg"/>
 
-> A mobile app for ordering coffee on-the-go, making it easier for coffee lovers to get their favorite beverages without waiting in line.
->
-> Coffee Express aims to streamline the coffee-ordering process by providing a user-friendly platform for customers to place orders and pick up their coffee at their convenience. We believe in enhancing the coffee experience by saving time and ensuring customer satisfaction.
+> TerrAlert is a system designed to monitor and analyze natural disasters using both historical and real-time data. It processes past disaster records and combines them with live earthquake data, helping to quickly identify the most vulnerable areas in need of resources during crises.
+
+> Big Picture: The main goal of TerrAlert is to help disaster relief organizations quickly spot ongoing or potential disasters in key areas, making it easier to allocate resources. By integrating real-time data with historical information, the system aims to give decision-makers a clear picture of disaster situations, helping them respond faster and manage aid better.
+
+> While the current version focuses on data processing and visualization, future updates will enhance TerrAlert’s ability to automatically detect high-risk areas and predict zones prone to disasters, getting closer to achieving the full vision of the system.
 
 ### User Stories
 - As a user, I want to browse the menu, so I can find my favorite coffee drinks.
