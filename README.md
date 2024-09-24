@@ -60,7 +60,7 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 
 | Real Time Earthquake Monitoring                          | 
 | ----------------------------------------- | 
-| ![Demo](./readme/earthquake.gif) |
+| ![Demo](./readme/earthquake.png) |
 
 
 <br><br>
