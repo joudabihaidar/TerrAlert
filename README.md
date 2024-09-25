@@ -49,18 +49,18 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 ### User Screens (Power BI report)
 
 | Landing Page                          | Overview                                |
-| -------------------------------------- | --------------------------------------- |
-| <img src="./readme/landing_page.png" width="350" height="200"> | <img src="./readme/overview.png" width="350" height="200"> |
+| ----------------------------------------- | ----------------------------------------- |
+| ![Demo](./readme/landing_page.png) | ![Demo](./readme/overview.png) |
 
 | Country-Specific Drill-Through          | Sneak Peek                          |
-| --------------------------------------- | ------------------------------------- |
-| <img src="./readme/country_drill_through.png" width="350" height="200"> | <img src="./readme/sneak_peek1.gif" width="350" height="200"> |
+| --------------------------------- | -------------------------------------- |
+| ![Demo](./readme/country_drill_through.png) | ![Demo](./readme/sneak_peek1.gif) |
 
 ### User Screens (Python)
 
 | Real Time Earthquake Monitoring                          | 
 | ----------------------------------------- | 
-| <img src="./readme/earthquakes.gif" width="725" height="auto" /> |
+| <img src="./readme/earthquakes.gif" width="800" height="auto" /> |
 <!-- | ![Demo](./readme/earthquake.gif) | -->
 
 
