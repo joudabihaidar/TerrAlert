@@ -50,11 +50,11 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 
 | Landing Page                          | Overview                                |
 | -------------------------------------- | --------------------------------------- |
-| <img src="./readme/landing_page.png" width="400" height="300"> | <img src="./readme/overview.png" width="400" height="300"> |
+| <img src="./readme/landing_page.png" width="500" height="200"> | <img src="./readme/overview.png" width="500" height="200"> |
 
 | Country-Specific Drill-Through          | Sneak Peek                          |
 | --------------------------------------- | ------------------------------------- |
-| <img src="./readme/country_drill_through.png" width="400" height="300"> | <img src="./readme/sneak_peek1.gif" width="400" height="300"> |
+| <img src="./readme/country_drill_through.png" width="500" height="300"> | <img src="./readme/sneak_peek1.gif" width="500" height="200"> |
 
 ### User Screens (Python)
 
