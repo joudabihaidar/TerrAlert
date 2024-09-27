@@ -48,9 +48,9 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 
 ### User Screens (Power BI report)
 
-| Landing Page                          | Overview                                |
+<!-- | Landing Page                          | Overview                                |
 | ----------------------------------------- | ----------------------------------------- |
-| ![Demo](./readme/landing_page.png) | ![Demo](./readme/overview.png) |
+| ![Demo](./readme/landing_page.png) | ![Demo](./readme/overview.png) | -->
 
 <!-- | Country-Specific Drill-Through          | Sneak Peek                          |
 | --------------------------------- | -------------------------------------- |
@@ -58,6 +58,9 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 | Sneak Peek                          |
 | -------------------------------------- |
 | ![Demo](./readme/sneak_peek1.gif) |
+| Landing Page                          | Overview                                |
+| ----------------------------------------- | ----------------------------------------- |
+| ![Demo](./readme/landing_page.png) | ![Demo](./readme/overview.png) |
 
 ### User Screens (Python)
 
