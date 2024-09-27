@@ -58,6 +58,7 @@ The star schema for TerrAlert offers several advantages, including simplicity, a
 | Sneak Peek                          |
 | -------------------------------------- |
 | ![Demo](./readme/sneak_peek1.gif) |
+
 | Landing Page                          | Overview                                |
 | ----------------------------------------- | ----------------------------------------- |
 | ![Demo](./readme/landing_page.png) | ![Demo](./readme/overview.png) |
